@@ -42,6 +42,8 @@ public class AdventureGame {
 		bigMap[4][5].environment = "a castle";
 		bigMap[5][4].environment = "a canyon";
 		bigMap[6][5].environment = "a meadow";
+		bigMap[5][5].items.add(ironSword());
+		bigMap[5][6].items.add(ironSword());
 		System.out.println("Here is how you play the game. To move, type north, south, east, or west.\r"
 		+ "To pick up an item, type 'pick up ', followed by the name of the item.\r"
 		+ "To drop an item, type 'drop ', followed by the name of the item.\r"
@@ -102,7 +104,8 @@ public class AdventureGame {
 
 	public static boolean playerMadeRealMove(String answer){
 		boolean result = false;	
-		if(	optPickUp(answer)||optDrop(answer)||optSummary(answer)||optAttack(answer, bigMap[myXCoord][myYCoord].mobs)){
+		if(	optPickUp(answer) || optDrop(answer) || optSummary(answer)
+		|| optAttack(answer, bigMap[myXCoord][myYCoord].mobs) || optEquip(answer)|| optUnequip(answer)){
 			result = true;
 		} else if(optSummary(answer)){
 			
@@ -141,13 +144,51 @@ public class AdventureGame {
 		return result;
 	}
 
+	public static boolean optEquip(String answer) {
+		boolean result = false;
+		if (answer.length() >= 7) {
+			String key = answer.substring(0, 6);
+			if (key.equals("equip ")) {
+				String restOfAnswer = answer.substring(6);
+				Weapon indicatedWeapon = Adventurer.getWeaponByName(restOfAnswer);	
+				if(indicatedWeapon != null){
+				if(Adventurer.equip(indicatedWeapon, INITIAL_DAMAGE)){	
+				result = true;	
+				}
+				}else{
+					System.out.println("That item cannot be equipped");
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean optUnequip (String answer){
+		boolean result = false;
+		if (answer.length() >= 9) {
+			String key = answer.substring(0, 8);
+			if (key.equals("unequip ")) {
+				String restOfAnswer = answer.substring(8);
+				Weapon indicatedWeapon = Adventurer.getWeaponByName(restOfAnswer);	
+				if(indicatedWeapon != null){
+				if(Adventurer.unequip(indicatedWeapon)){	
+				result = true;	
+				}
+				}else{
+					System.out.println("That item is not a weapon");
+				}
+			}
+		}
+		return result;
+	}
+	
 	public static boolean optPickUp(String answer) {
 		boolean result = false;
 		if (answer.length() >= 9) {
 			String key = answer.substring(0, 8);
 			if (key.equals("pick up ")) {
 				String restOfAnswer = answer.substring(8);
-				Item object = bigMap[myXCoord][myYCoord].getItemByName(restOfAnswer);
+				Item object = bigMap[myXCoord][myYCoord].getLocalItemByName(restOfAnswer);
 				result = Adventurer.pickUp(bigMap[myXCoord][myYCoord].items,
 						object);
 			}
@@ -161,7 +202,7 @@ public class AdventureGame {
 			String key = answer.substring(0, 5);
 			if (key.equals("drop ")) {
 				String restOfAnswer = answer.substring(5);
-				Item object = bigMap[myXCoord][myYCoord].getItemByName(restOfAnswer);
+				Item object = Adventurer.getItemByName(restOfAnswer);
 				result = Adventurer.drop(bigMap[myXCoord][myYCoord].items,
 						object);
 			}
@@ -270,7 +311,7 @@ public class AdventureGame {
 		Mob creeper = new Mob();
 		creeper.name = "creeper";
 		creeper.health = 1;
-		creeper.damage = 50;
+		creeper.damage = 10;
 		return creeper;
 	}
 	
@@ -280,6 +321,15 @@ public class AdventureGame {
 		pumpkin.weight = 1;
 		pumpkin.value = 1;
 		return pumpkin;
+	}
+	
+	public static Weapon ironSword(){
+		Weapon ironSword = new Weapon();
+		ironSword.name = "iron sword";
+		ironSword.weight = 2;
+		ironSword.value = 10;
+		ironSword.damage = 10;
+		return ironSword;
 	}
 
 	public static String directionAsString(int myX, int myY, int x, int y) {

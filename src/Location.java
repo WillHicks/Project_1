@@ -25,7 +25,7 @@ public Mob getMobByName (String input){
 	return result;
 }
 
-public Item getItemByName (String input){
+public Item getLocalItemByName (String input){
 	Item result = null;
 	for (Item i : items){
 		if(i.name.equalsIgnoreCase(input)){
@@ -34,5 +34,7 @@ public Item getItemByName (String input){
 	}  
 	return result;
 }
+
+
 
 }
