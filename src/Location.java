@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class Location {
-public ArrayList<String> items = new ArrayList<String>();
+public ArrayList<Item> items = new ArrayList<Item>();
 public ArrayList<Mob> mobs = new ArrayList<Mob>();
 public String environment;
 public int temperature;
@@ -20,6 +20,16 @@ public Mob getMobByName (String input){
 	for (Mob m : mobs){
 		if(m.name.equalsIgnoreCase(input)){
 			result = m;
+		}
+	}  
+	return result;
+}
+
+public Item getItemByName (String input){
+	Item result = null;
+	for (Item i : items){
+		if(i.name.equalsIgnoreCase(input)){
+			result = i;
 		}
 	}  
 	return result;

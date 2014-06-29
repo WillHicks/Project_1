@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 public class Adventurer {
 public static String name;	
-public static ArrayList<String> inventory = new ArrayList<String>();
+public static ArrayList<Item> inventory = new ArrayList<Item>();
 public static int health ;
 public static int damage;
 
-public static boolean pickUp (ArrayList<String> groundItems, String item){
+public static boolean pickUp (ArrayList<Item> groundItems, Item item){
 	boolean result = false;
 	if(groundItems.remove(item)){
 		result = true;
@@ -16,7 +16,7 @@ public static boolean pickUp (ArrayList<String> groundItems, String item){
 	return result;
 }
 
-public static boolean drop (ArrayList<String> groundItems, String item){
+public static boolean drop (ArrayList<Item> groundItems, Item item){
 	boolean result = false;
 	if(inventory.remove(item)){
 		result = true;
@@ -45,8 +45,8 @@ public static boolean attack (ArrayList<Mob> enemies, Mob enemy, int damage){
 
 public static void summarize (){
 	System.out.println("Here is what is in your inventory:");
-	for (String s : inventory){
-		System.out.println(s);
+	for (Item s : inventory){
+		System.out.println(s.name);
 	}
 }
 

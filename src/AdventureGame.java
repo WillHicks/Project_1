@@ -33,7 +33,7 @@ public class AdventureGame {
 			for (int j = 0; j < NUM_OF_COLUMNS; j++) {
 				bigMap[i][j] = new Location();
 				bigMap[i][j].environment = "a plain";
-				bigMap[i][j].items.add("pumpkin");
+				bigMap[i][j].items.add(pumpkin());
 				bigMap[i][j].mobs.add(creeper());
 			}
 		}
@@ -63,9 +63,9 @@ public class AdventureGame {
 			System.out.println(showSurroundings(myXCoord, myYCoord,
 					Location.convertLocToString(bigMap)));
 			System.out.println("The objects in the room are:");
-			ArrayList<String> stuff = showAllObjects(myXCoord, myYCoord, bigMap);
-			for (String s : stuff) {
-				System.out.println(s);
+			ArrayList<Item> stuff = showAllObjects(myXCoord, myYCoord, bigMap);
+			for (Item s : stuff) {
+				System.out.println(s.name);
 			}
 			System.out.println("The mobs in the room are:");
 			ArrayList<String> enemies = showAllMobs(allMobs(myXCoord, myYCoord,
@@ -146,7 +146,8 @@ public class AdventureGame {
 		if (answer.length() >= 9) {
 			String key = answer.substring(0, 8);
 			if (key.equals("pick up ")) {
-				String object = answer.substring(8);
+				String restOfAnswer = answer.substring(8);
+				Item object = bigMap[myXCoord][myYCoord].getItemByName(restOfAnswer);
 				result = Adventurer.pickUp(bigMap[myXCoord][myYCoord].items,
 						object);
 			}
@@ -159,7 +160,8 @@ public class AdventureGame {
 		if (answer.length() >= 6) {
 			String key = answer.substring(0, 5);
 			if (key.equals("drop ")) {
-				String object = answer.substring(5);
+				String restOfAnswer = answer.substring(5);
+				Item object = bigMap[myXCoord][myYCoord].getItemByName(restOfAnswer);
 				result = Adventurer.drop(bigMap[myXCoord][myYCoord].items,
 						object);
 			}
@@ -176,10 +178,10 @@ public class AdventureGame {
 		return result;
 	}
 
-	public static ArrayList<String> showAllObjects(int x, int y,
+	public static ArrayList<Item> showAllObjects(int x, int y,
 			Location[][] map) {
 
-		ArrayList<String> result = map[x][y].items;
+		ArrayList<Item> result = map[x][y].items;
 		return result;
 	}
 
@@ -270,6 +272,14 @@ public class AdventureGame {
 		creeper.health = 1;
 		creeper.damage = 50;
 		return creeper;
+	}
+	
+	public static Item pumpkin (){
+		Item pumpkin = new Item();
+		pumpkin.name = "pumpkin";
+		pumpkin.weight = 1;
+		pumpkin.value = 1;
+		return pumpkin;
 	}
 
 	public static String directionAsString(int myX, int myY, int x, int y) {
