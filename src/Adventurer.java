@@ -43,16 +43,22 @@ public boolean pickUpAll (ArrayList<Item> groundItems){
 	public boolean dropAll (ArrayList<Item> groundItems){
 		boolean result = false;
 		if(!inventory.isEmpty()){
-			for (Item i : inventory){
-				if (i != equippedWeapon){
-					inventory.remove(i);
-					groundItems.add(i);
-					result = true;
+			if (equippedWeapon == null){
+				groundItems.addAll(inventory);
+				inventory.clear();
+				result = true;
+			} else {
+				if (inventory.size() == 1){
+					System.out.println("There is nothing to drop.");
 				} else {
+					groundItems.addAll(inventory);
+					groundItems.remove(equippedWeapon);
+					inventory.clear();
+					inventory.add(equippedWeapon);
 					System.out.println("Your equipped weapon remains in your inventory.");
+					result = true;
 				}
 			}
-			
 		} else {
 			System.out.println("There are no items in your inventory.");
 		}
