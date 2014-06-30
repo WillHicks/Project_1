@@ -1,9 +1,10 @@
 import java.util.ArrayList;
-public class Location {
+public class Location{
 public ArrayList<Item> items = new ArrayList<Item>();
 public ArrayList<Mob> mobs = new ArrayList<Mob>();
 public String environment;
 public int temperature;
+public Trap trap = null;
 
 public static String[][] convertLocToString (Location[][] initialMap){
 	String[][] map = new String[AdventureGame.NUM_OF_ROWS][AdventureGame.NUM_OF_COLUMNS];

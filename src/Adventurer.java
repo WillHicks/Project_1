@@ -1,12 +1,8 @@
 import java.util.ArrayList;
-public class Adventurer {
-public static String name;	
-public static ArrayList<Item> inventory = new ArrayList<Item>();
-public static int health ;
-public static int damage;
-public static Weapon equippedWeapon = null;
+public class Adventurer extends Creature{
+public ArrayList<Item> inventory = new ArrayList<Item>();
 
-public static boolean pickUp (ArrayList<Item> groundItems, Item item){
+public boolean pickUp (ArrayList<Item> groundItems, Item item){
 	boolean result = false;
 	if(groundItems.remove(item)){
 		result = true;
@@ -17,7 +13,19 @@ public static boolean pickUp (ArrayList<Item> groundItems, Item item){
 	return result;
 }
 
-	public static boolean drop(ArrayList<Item> groundItems, Item item) {
+public boolean pickUpAll (ArrayList<Item> groundItems){
+	boolean result = false;
+	if(!groundItems.isEmpty()){
+		inventory.addAll(groundItems);
+		groundItems.clear();
+		result = true;
+	} else {
+		System.out.println("There are no items to pick up.");
+	}
+	return result;
+}
+
+	public boolean drop(ArrayList<Item> groundItems, Item item) {
 		boolean result = false;
 		if (item != equippedWeapon) {
 			if (inventory.remove(item)) {
@@ -31,8 +39,27 @@ public static boolean pickUp (ArrayList<Item> groundItems, Item item){
 		}
 		return result;
 	}
+	
+	public boolean dropAll (ArrayList<Item> groundItems){
+		boolean result = false;
+		if(!inventory.isEmpty()){
+			for (Item i : inventory){
+				if (i != equippedWeapon){
+					inventory.remove(i);
+					groundItems.add(i);
+					result = true;
+				} else {
+					System.out.println("Your equipped weapon remains in your inventory.");
+				}
+			}
+			
+		} else {
+			System.out.println("There are no items in your inventory.");
+		}
+		return result;
+	}
 
-	public static boolean equip (Weapon x, int advDamage){
+	public boolean equip (Weapon x, int advDamage){
 	boolean result = false;
 	if(inventory.contains(x)){
 		equippedWeapon= x;
@@ -46,7 +73,7 @@ public static boolean pickUp (ArrayList<Item> groundItems, Item item){
 	return result;
 }
 
-public static boolean unequip (Weapon x){
+public boolean unequip (Weapon x){
 	boolean result = false;
 	if(equippedWeapon != null){
 		equippedWeapon = null;
@@ -59,7 +86,7 @@ public static boolean unequip (Weapon x){
 	return result;
 }
 
-public static boolean attack (ArrayList<Mob> enemies, Mob enemy, int damage){
+public boolean attack (ArrayList<Mob> enemies, Mob enemy, int damage, Location x){
 	boolean result = false;
 	if(enemies.contains(enemy)){
 		result = true;
@@ -67,6 +94,7 @@ public static boolean attack (ArrayList<Mob> enemies, Mob enemy, int damage){
 		System.out.println("The "+enemy.name+" takes "+ damage +" damage");
 		if(enemy.health <= 0){
 			enemies.remove(enemy);
+			enemy.dropLoot(x);
 			System.out.println("The "+enemy.name+" is dead.");
 		}
 	} else {
@@ -75,7 +103,7 @@ public static boolean attack (ArrayList<Mob> enemies, Mob enemy, int damage){
 	return result;
 }
 
-public static Weapon getWeaponByName (String input){
+public Weapon getInvWeaponByName (String input){
 	Weapon result = null;
 	for (Item i : inventory){
 		if(i.name.equalsIgnoreCase(input)){
@@ -87,7 +115,7 @@ public static Weapon getWeaponByName (String input){
 	return result;
 }
 
-public static Item getItemByName (String input){
+public Item getInvItemByName (String input){
 	Item result = null;
 	for (Item i : inventory){
 		if(i.name.equalsIgnoreCase(input)){
@@ -97,7 +125,7 @@ public static Item getItemByName (String input){
 	return result;
 }
 
-public static void summarize (){
+public void summarize (){
 	System.out.println("Here is what is in your inventory:");
 	for (Item s : inventory){
 		if (s != equippedWeapon){
