@@ -24,7 +24,7 @@ public class AdventureGame {
 	}
 
 	public static void initialize() {
-		bigMap = new Location[NUM_OF_ROWS][NUM_OF_COLUMNS];
+		bigMap = new Location[NUM_OF_COLUMNS][NUM_OF_ROWS];
 		myXCoord = 5;
 		myYCoord = 5;
 		mainAdv.health = INITIAL_HEALTH;
@@ -46,7 +46,7 @@ public class AdventureGame {
 		bigMap[5][6].items.add(ironSword());
 		bigMap[5][6].trap = bearTrap();
 		/*System.out
-				.println("Here is how you play the game. To move, type north, south, east, or west.\r"
+				.println("Here is how you play the game. To move, type go north, south, east, or west.\r"
 						+ "To pick up an item, type 'pick up ', followed by the name of the item.\r"
 						+ "To drop an item, type 'drop ', followed by the name of the item.\r"
 						+ "To attack, type 'attack ', followed by the number of the mob you wish to attack, minus one.\r"
@@ -138,8 +138,17 @@ public class AdventureGame {
 
 	public static void determineMovement(String answer) {
 		String key = answer.substring(3);
-		myXCoord = myXCoord + moveWestOrEast(key);
-		myYCoord = myYCoord + moveNorthOrSouth(key);
+		if(key.equals("north") &&  myYCoord != NUM_OF_ROWS - 1){
+			myYCoord = myYCoord + 1;
+		}else if(key.equals("east") && myXCoord != NUM_OF_COLUMNS - 1){
+			myXCoord = myXCoord + 1;
+		}else if(key.equals("south") && myYCoord != 0){
+			myYCoord = myYCoord - 1;
+		}else if(key.equals("west") && myXCoord != 0){
+			myXCoord = myXCoord - 1;
+		}else{
+			System.out.println("You cannot go that way.");
+		}
 	}
 
 	public static boolean adventurerMoved(String answer) {
@@ -313,7 +322,7 @@ public class AdventureGame {
 
 	public static String whatIsToTheNorth(int x, int y, String[][] myMap) {
 		String result = "";
-		if (y <= NUM_OF_COLUMNS) {
+		if (y < NUM_OF_ROWS - 1) {
 			result = myMap[x][y + 1];
 		}
 		return result;
@@ -321,7 +330,7 @@ public class AdventureGame {
 
 	public static String whatIsToTheEast(int x, int y, String[][] myMap) {
 		String result = "";
-		if (x <= NUM_OF_ROWS) {
+		if (x < NUM_OF_COLUMNS - 1) {
 			result = myMap[x + 1][y];
 		}
 		return result;
