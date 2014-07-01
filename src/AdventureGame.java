@@ -81,13 +81,13 @@ public class AdventureGame {
 
 			System.out.println("what do you want to do?");
 			String answer = myScanner.nextLine();
-			determineMovement(answer);
 			if (!adventurerMoved(answer)) {
 				if (playerMadeRealMove(answer)) {
 					determineMobAction();
 					turn++;
 				}
 			} else {
+				determineMovement(answer);
 				activateTraps();
 				System.out.println("You are curently at "
 						+ showMyLocation(myXCoord, myYCoord,
@@ -393,6 +393,22 @@ public class AdventureGame {
 		return bearTrap;
 	}
 
+	public static void initializeEffects() {
+		Effect invisibility = null;
+		Effect healing = null;
+		invisibility = new Effect("Invisibility") {
+			@Override public void go(Element elem, Object newVal) {
+				elem.visibility = (Float) newVal;
+			}
+		};
+		healing = new Effect("Healing") {
+			@Override public void go(Element elem, Object newVal) {
+				mainAdv.health = (int) (mainAdv.health + (Float) newVal);
+			}
+		};
+	}
+	
+	
 	public static String directionAsString(int myX, int myY, int x, int y) {
 
 		String result = "";
