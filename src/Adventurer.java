@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class Adventurer extends Creature {
 	public ArrayList<Item> inventory = new ArrayList<Item>();
+	public float gold;
 
 	public boolean pickUp(ArrayList<Item> groundItems, Item item) {
 		boolean result = false;
@@ -114,7 +115,49 @@ public class Adventurer extends Creature {
 		}
 		return result;
 	}
+	
+	public boolean sell(Merchant m, Item i) {
+		boolean result = false;
+		if (inventory.contains(i)) {
+			if (i.value < m.gold) {
+				gold = gold + i.value;
+				m.gold = m.gold - i.value;
+				inventory.remove(i);
+				m.inventory.add(i);
+				System.out.println("You sell your " + i.name + " for "
+						+ i.value + " gold.");
+				result = true;
+			} else {
+				System.out
+						.println("The merchant does not have enough money to pay for that.");
+			}
+		} else {
+			System.out.println("That item is not in your inventory.");
+		}
+		return result;
+	}
 
+	public boolean buy(Merchant m, Item i) {
+		boolean result = false;
+		if (m.inventory.contains(i)) {
+			if (i.value < gold) {
+				gold = gold - i.value;
+				m.gold = m.gold + i.value;
+				inventory.add(i);
+				m.inventory.remove(i);
+				System.out.println("You buy the merchant's " + i.name + " for "
+						+ i.value + " gold.");
+				result = true;
+			} else {
+				System.out
+						.println("You do not have enough money to pay for that.");
+			}
+		} else {
+			System.out.println("The merchant does not carry that item.");
+		}
+		return result;
+	}
+	
 	public Weapon getInvWeaponByName(String input) {
 		Weapon result = null;
 		for (Item i : inventory) {
@@ -137,7 +180,7 @@ public class Adventurer extends Creature {
 		return result;
 	}
 
-	public void summarize() {
+	public void showInventory() {
 		System.out.println("Here is what is in your inventory:");
 		for (Item s : inventory) {
 			if (s != equippedWeapon) {
@@ -147,5 +190,6 @@ public class Adventurer extends Creature {
 			}
 		}
 	}
+	
 
 }

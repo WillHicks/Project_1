@@ -43,6 +43,8 @@ public class AdventureGame {
 		bigMap[5][4].environment = "a canyon";
 		bigMap[6][5].environment = "a meadow";
 		bigMap[5][5].items.add(ironSword());
+		bigMap[5][5].mobs.remove(creeper());
+		bigMap[5][5].merchant = pumpkinVendor();
 		bigMap[5][6].items.add(ironSword());
 		bigMap[5][6].trap = bearTrap();
 		/*System.out
@@ -77,6 +79,10 @@ public class AdventureGame {
 					bigMap));
 			for (String s : enemies) {
 				System.out.println(s);
+			}
+			
+			if(bigMap[myXCoord][myYCoord].merchant != null){
+				System.out.println("There is a " + bigMap[myXCoord][myYCoord].merchant.name + " at this location.");
 			}
 
 			System.out.println("what do you want to do?");
@@ -126,7 +132,7 @@ public class AdventureGame {
 		boolean result = false;
 		if (optPickUp(answer) || optDrop(answer) || optSummary(answer)
 				|| optAttack(answer, bigMap[myXCoord][myYCoord].mobs)
-				|| optEquip(answer) || optUnequip(answer)) {
+				|| optEquip(answer) || optUnequip(answer) || optBuy(answer) || optSell(answer)) {
 			result = true;
 		} else if (optSummary(answer)) {
 
@@ -160,6 +166,38 @@ public class AdventureGame {
 		return result;
 	}
 
+	public static boolean optBuy(String answer){
+		boolean result = false;
+		if (answer.length() >= 5) {
+			String key = answer.substring(0, 4);
+			if (key.equals("buy ")) {
+				String restOfAnswer = answer.substring(4);
+				Item indicatedItem = bigMap[myXCoord][myYCoord].merchant.getMercItemByName(restOfAnswer);
+				if (mainAdv.buy(bigMap[myXCoord][myYCoord].merchant, indicatedItem)) {
+					result = true;
+				}
+
+			}
+		}
+		return result;
+	}
+	
+	public static boolean optSell(String answer){
+		boolean result = false;
+		if (answer.length() >= 6) {
+			String key = answer.substring(0, 5);
+			if (key.equals("sell ")) {
+				String restOfAnswer = answer.substring(5);
+				Item indicatedItem = mainAdv.getInvItemByName(restOfAnswer);
+				if (mainAdv.sell(bigMap[myXCoord][myYCoord].merchant, indicatedItem)) {
+					result = true;
+				}
+
+			}
+		}
+		return result;
+	}
+	
 	public static boolean optAttack(String answer, ArrayList<Mob> presentEnemies) {
 		boolean result = false;
 		if (answer.length() >= 8) {
@@ -258,9 +296,11 @@ public class AdventureGame {
 
 	public static boolean optSummary(String answer) {
 		boolean result = false;
-		if (answer.equals("show")) {
-			mainAdv.summarize();
+		if (answer.equals("inventory")) {
+			mainAdv.showInventory();
 			result = true;
+		} else if (answer.equals("show merchant")){
+			bigMap[myXCoord][myYCoord].merchant.describeMerchant();
 		}
 		return result;
 	}
@@ -376,7 +416,18 @@ public class AdventureGame {
 		pumpkin.value = 0.1F;
 		return pumpkin;
 	}
-
+	
+	public static ArrayList<Item> pumpkinVendorInv(){
+		ArrayList<Item> pumpkinVendorInv = new ArrayList<Item>();
+		pumpkinVendorInv.add(pumpkin());
+		return pumpkinVendorInv;
+	}
+	
+	public static Merchant pumpkinVendor(){
+		Merchant m = new Merchant("Pumpkin vendor", 20, 15, pumpkinVendorInv());
+		return m;
+	}
+	
 	public static Weapon ironSword() {
 		Weapon ironSword = new Weapon();
 		ironSword.name = "iron sword";
@@ -393,20 +444,7 @@ public class AdventureGame {
 		return bearTrap;
 	}
 
-	public static void initializeEffects() {
-		Effect invisibility = null;
-		Effect healing = null;
-		invisibility = new Effect("Invisibility") {
-			@Override public void go(Element elem, Object newVal) {
-				elem.visibility = (Float) newVal;
-			}
-		};
-		healing = new Effect("Healing") {
-			@Override public void go(Element elem, Object newVal) {
-				mainAdv.health = (int) (mainAdv.health + (Float) newVal);
-			}
-		};
-	}
+	
 	
 	
 	public static String directionAsString(int myX, int myY, int x, int y) {
