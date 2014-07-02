@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public class Adventurer extends Creature {
-	public ArrayList<Item> inventory = new ArrayList<Item>();
 	public float gold;
 
 	public boolean pickUp(ArrayList<Item> groundItems, Item item) {
@@ -97,7 +96,7 @@ public class Adventurer extends Creature {
 		return result;
 	}
 
-	public boolean attack(ArrayList<Mob> enemies, Mob enemy, int damage,
+	public boolean attack( ArrayList<Creature> enemies, Creature enemy, int damage,
 			Location x) {
 		boolean result = false;
 		if (enemies.contains(enemy)) {
@@ -105,8 +104,16 @@ public class Adventurer extends Creature {
 			enemy.health = enemy.health - damage;
 			System.out.println("The " + enemy.name + " takes " + damage
 					+ " damage");
+			if(enemy instanceof Merchant){
+				((Merchant) enemy).hostile = true;
+			}
 			if (enemy.health <= 0) {
 				enemies.remove(enemy);
+				if(enemy instanceof Mob){
+					x.mobs.remove(enemy);
+				} else if (enemy instanceof Merchant){
+					x.merchant = null;
+				}
 				enemy.dropLoot(x);
 				System.out.println("The " + enemy.name + " is dead.");
 			}

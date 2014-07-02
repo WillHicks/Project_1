@@ -116,11 +116,17 @@ public class AdventureGame {
 	}
 
 	public static void determineMobAction() {
-		ArrayList<Mob> enemies = bigMap[myXCoord][myYCoord].mobs;
+		ArrayList<Creature> enemies = new ArrayList<Creature>();
+		enemies.addAll(bigMap[myXCoord][myYCoord].mobs);
+		if(bigMap[myXCoord][myYCoord].merchant != null){
+			if(bigMap[myXCoord][myYCoord].merchant.hostile){
+				enemies.add(bigMap[myXCoord][myYCoord].merchant);
+			}
+		}
 		int length = enemies.size();
 		if (length > 0) {
 			for (int i = 0; i < length; i++) {
-				Mob enemy = enemies.get(i);
+				Creature enemy = enemies.get(i);
 				mainAdv.health = mainAdv.health - enemy.damage;
 				System.out.println("The " + enemy.name + " attacks you for "
 						+ enemy.damage + " damage");
@@ -200,14 +206,17 @@ public class AdventureGame {
 	
 	public static boolean optAttack(String answer, ArrayList<Mob> presentEnemies) {
 		boolean result = false;
+		ArrayList<Creature> enemies = new ArrayList<Creature>();
+		enemies.addAll(bigMap[myXCoord][myYCoord].mobs);
+		enemies.add(bigMap[myXCoord][myYCoord].merchant);
 		if (answer.length() >= 8) {
 			String key = answer.substring(0, 7);
 			if (key.equals("attack ")) {
 				String restOfAnswer = answer.substring(7);
-				Mob indicatedMob = bigMap[myXCoord][myYCoord]
-						.getMobByName(restOfAnswer);
-				if (mainAdv.attack(bigMap[myXCoord][myYCoord].mobs,
-						indicatedMob, mainAdv.damage,
+				Creature enemy = bigMap[myXCoord][myYCoord]
+						.getCreatureByName(restOfAnswer, enemies);
+				if (mainAdv.attack( enemies,
+						enemy, mainAdv.damage,
 						bigMap[myXCoord][myYCoord])) {
 					result = true;
 				}
@@ -398,7 +407,7 @@ public class AdventureGame {
 		creeper.name = "creeper";
 		creeper.health = 1;
 		creeper.damage = 10;
-		creeper.loot.add(creeperHead());
+		creeper.inventory.add(creeperHead());
 		return creeper;
 	}
 
@@ -425,7 +434,7 @@ public class AdventureGame {
 	}
 	
 	public static Merchant pumpkinVendor(){
-		Merchant m = new Merchant("Pumpkin vendor", 20, 15, pumpkinVendorInv());
+		Merchant m = new Merchant("Pumpkin vendor", 20, 15, pumpkinVendorInv(), 5, ironSword());
 		return m;
 	}
 	

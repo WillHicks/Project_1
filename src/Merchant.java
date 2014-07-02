@@ -2,16 +2,17 @@ import java.util.ArrayList;
 
 
 public class Merchant extends Creature {
-	public ArrayList<Item> inventory = new ArrayList<Item>();
 	public float gold;
+	public boolean hostile;
 	
-	public Merchant(String name, int health, float gold, ArrayList<Item> inventory){
-		equippedWeapon = null;
-		damage = 0;
+	public Merchant(String name, int health, float gold, ArrayList<Item> inventory, int damage, Weapon equippedWeapon){
+		this.equippedWeapon = equippedWeapon;
+		this.damage = damage + equippedWeapon.damage;
 		this.name = name;
 		this.health = health;
 		this.gold = gold;
 		this.inventory = inventory;
+		hostile = false;
 	}
 	
 	public Item getMercItemByName(String input) {

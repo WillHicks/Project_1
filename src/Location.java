@@ -27,6 +27,16 @@ public Mob getMobByName (String input){
 	return result;
 }
 
+public Creature getCreatureByName(String input, ArrayList<Creature> candidates) {
+	Creature result = null;
+	for (Creature i : candidates) {
+		if (i.name.equalsIgnoreCase(input)) {			
+				result =  i;			
+		}
+	}
+	return result;
+}
+
 public Item getLocalItemByName (String input){
 	Item result = null;
 	for (Item i : items){
