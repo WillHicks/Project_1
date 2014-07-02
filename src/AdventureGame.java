@@ -299,8 +299,9 @@ public class AdventureGame {
 		if (answer.equals("inventory")) {
 			mainAdv.showInventory();
 			result = true;
-		} else if (answer.equals("show merchant")){
+		} else if (answer.equals("merchant")){
 			bigMap[myXCoord][myYCoord].merchant.describeMerchant();
+			result = true;
 		}
 		return result;
 	}
