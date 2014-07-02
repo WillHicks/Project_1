@@ -7,9 +7,13 @@ public int health ;
 public int damage;
 public Weapon equippedWeapon = null;
 public ArrayList<Item> inventory = new ArrayList<Item>();
+public float gold;
 
 public void dropLoot(Location tile){
+	tile.gold = tile.gold + gold;
 	tile.items.addAll(inventory);
+	gold = 0;
+	inventory.clear();
 }
 
 public Creature getCreatureByName(String input, ArrayList<Creature> candidates) {

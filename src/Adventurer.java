@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public class Adventurer extends Creature {
-	public float gold;
 
 	public boolean pickUp(ArrayList<Item> groundItems, Item item) {
 		boolean result = false;
@@ -14,11 +13,13 @@ public class Adventurer extends Creature {
 		return result;
 	}
 
-	public boolean pickUpAll(ArrayList<Item> groundItems) {
+	public boolean pickUpAll(Location x) {
 		boolean result = false;
-		if (!groundItems.isEmpty()) {
-			inventory.addAll(groundItems);
-			groundItems.clear();
+		if (!x.items.isEmpty() || x.gold != 0) {
+			inventory.addAll(x.items);
+			x.items.clear();
+			gold = gold + x.gold;
+			x.gold = 0;
 			result = true;
 		} else {
 			System.out.println("There are no items to pick up.");
@@ -127,6 +128,9 @@ public class Adventurer extends Creature {
 		boolean result = false;
 		if (inventory.contains(i)) {
 			if (i.value < m.gold) {
+				if(i == equippedWeapon){
+					equippedWeapon = null;
+				}
 				gold = gold + i.value;
 				m.gold = m.gold - i.value;
 				inventory.remove(i);
@@ -146,7 +150,7 @@ public class Adventurer extends Creature {
 
 	public boolean buy(Merchant m, Item i) {
 		boolean result = false;
-		if (m.inventory.contains(i)) {
+		if (m.inventory.contains(i) && i != m.equippedWeapon) {
 			if (i.value < gold) {
 				gold = gold - i.value;
 				m.gold = m.gold + i.value;
@@ -189,6 +193,7 @@ public class Adventurer extends Creature {
 
 	public void showInventory() {
 		System.out.println("Here is what is in your inventory:");
+		System.out.println(gold + " gold");
 		for (Item s : inventory) {
 			if (s != equippedWeapon) {
 				System.out.println(s.name);

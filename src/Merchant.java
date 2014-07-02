@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 
 public class Merchant extends Creature {
-	public float gold;
 	public boolean hostile;
 	
 	public Merchant(String name, int health, float gold, ArrayList<Item> inventory, int damage, Weapon equippedWeapon){
@@ -13,6 +12,7 @@ public class Merchant extends Creature {
 		this.gold = gold;
 		this.inventory = inventory;
 		hostile = false;
+		inventory.add(equippedWeapon);
 	}
 	
 	public Item getMercItemByName(String input) {
@@ -29,7 +29,9 @@ public class Merchant extends Creature {
 	public void describeMerchant(){
 		System.out.println("The "+name+" is carrying:");
 		for (Item s : inventory) {
+			if (s != equippedWeapon){
 			System.out.println(s.name);
+			}
 		}
 		System.out.println("The "+ name +" has " + gold +" gold");
 	}

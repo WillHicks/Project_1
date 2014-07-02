@@ -6,6 +6,7 @@ public String environment;
 public int temperature;
 public Trap trap = null;
 public Merchant merchant = null;
+public float gold = 0;
 
 public static String[][] convertLocToString (Location[][] initialMap){
 	String[][] map = new String[AdventureGame.NUM_OF_ROWS][AdventureGame.NUM_OF_COLUMNS];

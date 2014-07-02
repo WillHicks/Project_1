@@ -74,6 +74,9 @@ public class AdventureGame {
 			for (Item s : stuff) {
 				System.out.println(s.name);
 			}
+			if(bigMap[myXCoord][myYCoord].gold != 0){
+			System.out.println(bigMap[myXCoord][myYCoord].gold + " gold");
+			}
 			System.out.println("The mobs in the room are:");
 			ArrayList<String> enemies = showAllMobs(allMobs(myXCoord, myYCoord,
 					bigMap));
@@ -273,8 +276,12 @@ public class AdventureGame {
 			if (key.equals("pick up ")) {
 				String restOfAnswer = answer.substring(8);
 				if (restOfAnswer.equals("all")) {
-					result = mainAdv.pickUpAll(bigMap[myXCoord][myYCoord].items);
-				} else {
+					result = mainAdv.pickUpAll(bigMap[myXCoord][myYCoord]);
+				} else if (restOfAnswer.equals("gold")){
+					mainAdv.gold = mainAdv.gold + bigMap[myXCoord][myYCoord].gold;
+					bigMap[myXCoord][myYCoord].gold = 0;
+				}
+				else {
 					Item object = bigMap[myXCoord][myYCoord]
 							.getLocalItemByName(restOfAnswer);
 					result = mainAdv.pickUp(bigMap[myXCoord][myYCoord].items,
