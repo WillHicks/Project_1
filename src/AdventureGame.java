@@ -43,6 +43,7 @@ public class AdventureGame {
 		bigMap[5][4].environment = "a canyon";
 		bigMap[6][5].environment = "a meadow";
 		bigMap[5][5].items.add(ironSword());
+		bigMap[5][5].items.add(Potion.getPotionByName("potion of healing"));
 		bigMap[5][5].mobs.remove(creeper());
 		bigMap[5][5].merchant = pumpkinVendor();
 		bigMap[5][6].items.add(ironSword());
@@ -141,7 +142,8 @@ public class AdventureGame {
 		boolean result = false;
 		if (optPickUp(answer) || optDrop(answer) || optSummary(answer)
 				|| optAttack(answer, bigMap[myXCoord][myYCoord].mobs)
-				|| optEquip(answer) || optUnequip(answer) || optBuy(answer) || optSell(answer)) {
+				|| optEquip(answer) || optUnequip(answer) || optBuy(answer) || optSell(answer)
+				|| optQuaff(answer)) {
 			result = true;
 		} else if (optSummary(answer)) {
 
@@ -305,6 +307,19 @@ public class AdventureGame {
 				result = mainAdv.drop(bigMap[myXCoord][myYCoord].items,
 						object);
 				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean optQuaff(String answer) {
+		boolean result = false;
+		if (answer.length() >= 7) {
+			String key = answer.substring(0, 6);
+			if (key.equals("drink ")) {
+				String restOfAnswer = answer.substring(6);
+				mainAdv.drinkPotion(restOfAnswer);
+				result = true;
 			}
 		}
 		return result;

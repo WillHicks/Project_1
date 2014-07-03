@@ -169,6 +169,20 @@ public class Adventurer extends Creature {
 		return result;
 	}
 	
+	public boolean drinkPotion(String s){
+		boolean result = false;
+		Potion p = Potion.getPotionByName(s);
+		if(inventory.contains(p)){
+		Object obj = Potion.getPotionValue(p);				
+		p.drink(null, obj);
+		inventory.remove(p);
+		result = true;
+		} else{
+			System.out.println("That potion is not in your inventory");
+		}
+		return result;
+	}
+	
 	public Weapon getInvWeaponByName(String input) {
 		Weapon result = null;
 		for (Item i : inventory) {
