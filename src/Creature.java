@@ -8,6 +8,7 @@ public int damage;
 public Weapon equippedWeapon = null;
 public ArrayList<Item> inventory = new ArrayList<Item>();
 public float gold;
+public int exp;
 
 public void dropLoot(Location tile){
 	tile.gold = tile.gold + gold;

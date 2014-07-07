@@ -2,6 +2,13 @@ import java.util.ArrayList;
 
 public class Adventurer extends Creature {
 
+	public int mana;
+	public int strength;
+	public int agility;
+	public int exp;
+	public int level;
+	public ArrayList<Spell> spellBook = new ArrayList<Spell>();
+	
 	public boolean pickUp(ArrayList<Item> groundItems, Item item) {
 		boolean result = false;
 		if (groundItems.remove(item)) {
@@ -124,6 +131,33 @@ public class Adventurer extends Creature {
 		return result;
 	}
 	
+	public boolean castSpell( ArrayList<Creature> enemies, Creature enemy, int damage,
+			Location x) {
+		boolean result = false;
+		if (enemies.contains(enemy)) {
+			result = true;
+			enemy.health = enemy.health - damage;
+			System.out.println("The " + enemy.name + " takes " + damage
+					+ " damage");
+			if(enemy instanceof Merchant){
+				((Merchant) enemy).hostile = true;
+			}
+			if (enemy.health <= 0) {
+				enemies.remove(enemy);
+				if(enemy instanceof Mob){
+					x.mobs.remove(enemy);
+				} else if (enemy instanceof Merchant){
+					x.merchant = null;
+				}
+				enemy.dropLoot(x);
+				System.out.println("The " + enemy.name + " is dead.");
+			}
+		} else {
+			System.out.println("This enemy is not present");
+		}
+		return result;
+	}
+	
 	public boolean sell(Merchant m, Item i) {
 		boolean result = false;
 		if (inventory.contains(i)) {
@@ -174,11 +208,25 @@ public class Adventurer extends Creature {
 		Potion p = Potion.getPotionByName(s);
 		if(inventory.contains(p)){
 		Object obj = Potion.getPotionValue(p);				
-		p.drink(null, obj);
+		p.drink(null, 0, obj);
 		inventory.remove(p);
 		result = true;
 		} else{
 			System.out.println("That potion is not in your inventory");
+		}
+		return result;
+	}
+	
+	public boolean readScroll(String x, Adventurer a){
+		boolean result = false;
+		Scroll s = Scroll.getScrollByName(x, inventory);
+		if(s != null){
+		s.teachSpell(a);
+		inventory.remove(s);
+		result = true;
+		System.out.println("You learn the spell " + s.spell.name + " from the " + s.name);
+		} else{
+			System.out.println("That scroll is not in your inventory");
 		}
 		return result;
 	}

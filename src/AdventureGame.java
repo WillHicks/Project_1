@@ -47,6 +47,7 @@ public class AdventureGame {
 		bigMap[5][5].mobs.remove(creeper());
 		bigMap[5][5].merchant = pumpkinVendor();
 		bigMap[5][6].items.add(ironSword());
+		bigMap[5][5].items.add(healingScroll());
 		bigMap[5][6].trap = bearTrap();
 		/*System.out
 				.println("Here is how you play the game. To move, type go north, south, east, or west.\r"
@@ -143,7 +144,7 @@ public class AdventureGame {
 		if (optPickUp(answer) || optDrop(answer) || optSummary(answer)
 				|| optAttack(answer, bigMap[myXCoord][myYCoord].mobs)
 				|| optEquip(answer) || optUnequip(answer) || optBuy(answer) || optSell(answer)
-				|| optQuaff(answer)) {
+				|| optQuaff(answer) || optRead(answer)) {
 			result = true;
 		} else if (optSummary(answer)) {
 
@@ -325,6 +326,22 @@ public class AdventureGame {
 		return result;
 	}
 
+	public static boolean optRead(String answer){
+		boolean result = false;
+		if (answer.length() >= 6) {
+			String key = answer.substring(0, 5);
+			if (key.equals("read ")) {
+				String restOfAnswer = answer.substring(5);
+					
+				if(mainAdv.readScroll(restOfAnswer, mainAdv)){
+					result = true;
+				}
+
+			}
+		}
+		return result;
+	}
+	
 	public static boolean optSummary(String answer) {
 		boolean result = false;
 		if (answer.equals("inventory")) {
@@ -476,7 +493,14 @@ public class AdventureGame {
 		return bearTrap;
 	}
 
-	
+	public static Scroll healingScroll(){
+		Scroll healingScroll = new Scroll();
+		healingScroll.name = "scroll of healing";
+		healingScroll.spell = Spell.getSpellByName("healing");
+		healingScroll.value = 50;
+		healingScroll.weight = 0.5F;
+		return healingScroll;
+	}
 	
 	
 	public static String directionAsString(int myX, int myY, int x, int y) {

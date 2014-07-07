@@ -1,24 +1,16 @@
 
 public class Effect {
 	public String name = "";
-	public String longDescription = "";
-	public int maxIntensity = 10;
-	public int minIntensity = 0;
+	public int intensity = 10;
+	public Object value;
 
-	public Effect(String name) {
-		super();
+	public Effect(String name, int intensity, Object value) {
 		this.name = name;
+		this.intensity = intensity;
+		this.value = value;
 	}
 	
-	public Effect(String name, String longDescription, int maxIntensity,
-			int minIntensity) {
-		this.name = name;
-		this.longDescription = longDescription;
-		this.maxIntensity = maxIntensity;
-		this.minIntensity = minIntensity;
-	}
-	
-	public void go(Element elem, Object newVal) {
+	public void go(Element elem, int intensity, Object newVal) {
 		System.out.println("You should never see this sentence.");
 	}
 	
